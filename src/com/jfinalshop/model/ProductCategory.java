@@ -78,7 +78,7 @@ public class ProductCategory extends Model<ProductCategory>{
 	 * 
 	 */
 	public List<ProductCategory> getRootProductCategoryList() {
-		String sql = "select * from ProductCategory  where parent_id is null order by orderList asc";
+		String sql = "select * from productcategory  where parent_id is null order by orderList asc";
 		return dao.find(sql);
 	}
 	
@@ -90,7 +90,7 @@ public class ProductCategory extends Model<ProductCategory>{
 	 */
 	public List<ProductCategory> getParentProductCategoryList(ProductCategory productCategory) {
 		String[] ids = productCategory.getStr("path").split(ProductCategory.PATH_SEPARATOR);
-		String sql = "select * from ProductCategory  where id != ? and id in(?) order by orderList asc";		
+		String sql = "select * from productcategory  where id != ? and id in(?) order by orderList asc";		
 		return dao.find(sql,productCategory.getStr("id"),ids);
 	}
 	
@@ -128,7 +128,7 @@ public class ProductCategory extends Model<ProductCategory>{
 	 * 
 	 */
 	public List<ProductCategory> getChildrenProductCategoryList(ProductCategory productCategory) {
-		String sql = "select * from  ProductCategory  where id != ? and path like ? order by orderList asc";
+		String sql = "select * from  productcategory  where id != ? and path like ? order by orderList asc";
 		return dao.find(sql,productCategory.getStr("id"),productCategory.getStr("id") + "%");
 	}
 	

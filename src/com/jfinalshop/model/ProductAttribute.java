@@ -30,7 +30,7 @@ public class ProductAttribute extends Model<ProductAttribute> {
 	 */
 	public Page<ProductAttribute> findByPager(String productTypeId) {
 		String select = "select * ";
-		String sqlExceptSelect = " from productAttribute where productType_id = ? order by createDate desc ";
+		String sqlExceptSelect = " from productattribute where productType_id = ? order by createDate desc ";
 		
 		Page<ProductAttribute> pager = dao.paginate(1, 100, select, sqlExceptSelect,productTypeId);
 		return pager;
@@ -47,7 +47,7 @@ public class ProductAttribute extends Model<ProductAttribute> {
 	 * 
 	 */
 	public ProductAttribute getProductAttribute(String productTypeId, String name){
-		return dao.findFirst("select * from ProductAttribute t where productType_id = ? and name = ?",productTypeId,name);
+		return dao.findFirst("select * from productattribute t where productType_id = ? and name = ?",productTypeId,name);
 	}
 		    
     // 商品类型
@@ -80,7 +80,7 @@ public class ProductAttribute extends Model<ProductAttribute> {
 	 */
  	public List<ProductAttribute> getEnabledProductAttributeList(String productType) {
 		//String sql = "select attributeOptionStore,attributeType,id,isEnabled,isRequired,name,orderList from ProductAttribute  where isEnabled = ? and productType_id = ? order by orderList asc";
- 		String sql = "select * from ProductAttribute  where isEnabled = ? and productType_id = ? order by orderList asc";
+ 		String sql = "select * from productattribute  where isEnabled = ? and productType_id = ? order by orderList asc";
 		productAttributeList =  dao.find(sql,true,productType);
 		
 		if (productAttributeList == null) {

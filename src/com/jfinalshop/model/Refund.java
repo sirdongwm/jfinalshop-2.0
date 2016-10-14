@@ -41,7 +41,7 @@ public class Refund extends Model<Refund>{
 	 * @return 收款编号
 	 */
 	public String getLastRefundSn() {
-		String sql = "select * from Refund  order by createDate desc";
+		String sql = "select * from refund  order by createDate desc";
 		Refund refundList =  dao.findFirst(sql);
 		if (refundList != null) {
 			return refundList.getStr("refundSn");

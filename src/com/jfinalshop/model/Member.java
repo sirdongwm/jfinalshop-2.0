@@ -52,7 +52,7 @@ public class Member extends Model<Member> {
 	 * 
 	 */
 	public boolean isExistByUsername(String username) {
-		String sql = "select * from Member where lower(username) = lower(?)";
+		String sql = "select * from member where lower(username) = lower(?)";
 		Member member = dao.findFirst(sql,username);
 		if (member != null) {
 			return true;

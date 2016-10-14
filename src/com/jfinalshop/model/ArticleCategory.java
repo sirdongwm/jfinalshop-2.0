@@ -18,7 +18,7 @@ public class ArticleCategory extends Model<ArticleCategory>{
 	public static final ArticleCategory dao = new ArticleCategory();
 	
 	public List<ArticleCategory> getAll() {
-		String sql = "select * from ArticleCategory  order by orderList asc ";
+		String sql = "select * from articlecategory  order by orderList asc ";
 		return dao.find(sql);
 	}
 	
@@ -86,7 +86,7 @@ public class ArticleCategory extends Model<ArticleCategory>{
 	 * 
 	 */	
 	public List<ArticleCategory> getParentArticleCategoryList(ArticleCategory articleCategory) {
-		String sql = "select * from ArticleCategory where id != ? and id in(?) order by orderList asc";
+		String sql = "select * from articlecategory where id != ? and id in(?) order by orderList asc";
 		String[] ids = articleCategory.getStr("path").split(ArticleCategory.PATH_SEPARATOR);
 		return dao.find(sql,articleCategory.getStr("id"),ids);
 	}
@@ -98,7 +98,7 @@ public class ArticleCategory extends Model<ArticleCategory>{
 	 * 
 	 */
 	public List<ArticleCategory> getRootArticleCategoryList() {
-		String sql = "select * from ArticleCategory where parent_id is null order by orderList asc";
+		String sql = "select * from articlecategory where parent_id is null order by orderList asc";
 		return dao.find(sql);
 	}
 	

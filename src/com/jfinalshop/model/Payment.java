@@ -57,7 +57,7 @@ public class Payment extends Model<Payment>{
 	 * @return 支付编号
 	 */
 	public String getLastPaymentSn() {
-		String sql = "select * from Payment order by createDate desc";
+		String sql = "select * from payment order by createDate desc";
 		Payment paymentList =  dao.findFirst(sql);
 		if (paymentList != null) {
 			return paymentList.getStr("paymentSn");
@@ -72,7 +72,7 @@ public class Payment extends Model<Payment>{
 	 * @return 支付对象
 	 */
 	public Payment getPaymentByPaymentSn(String paymentSn) {
-		String sql = "select * from Payment  where paymentSn = ?";
+		String sql = "select * from payment  where paymentSn = ?";
 		return dao.findFirst(sql,paymentSn);
 	}
 }

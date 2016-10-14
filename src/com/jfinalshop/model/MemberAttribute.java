@@ -47,6 +47,6 @@ public class MemberAttribute extends Model<MemberAttribute>{
 	 * @return 已启用的会员注册项集合.
 	 */
 	public List<MemberAttribute> getEnabledMemberAttributeList(){		
-		return dao.find("select * from MemberAttribute  where isEnabled = ? order by orderList asc",true);		
+		return dao.find("select * from memberattribute  where isEnabled = ? order by orderList asc",true);		
 	}
 }

@@ -28,7 +28,7 @@ public class Message extends Model<Message>{
 	public Page<Message> getAdminInboxPager(int pageNumber, int pageSize,String orderBy, String orderType, String property, String keyword) {
 
 		String select = " select  m.*";
-		String sqlExceptSelect = " from Message m inner join Member mb on m.fromMember_id = mb.id where m.tomember_id is null and m.isSaveDraftbox = ? and m.deleteStatus <> ? "; 
+		String sqlExceptSelect = " from message m inner join member mb on m.fromMember_id = mb.id where m.tomember_id is null and m.isSaveDraftbox = ? and m.deleteStatus <> ? "; 
 
 		if (StrKit.notBlank(property) && StrKit.notBlank(keyword)) {
 			sqlExceptSelect += " and " + property + " like '%" + keyword + "%'";
@@ -51,7 +51,7 @@ public class Message extends Model<Message>{
 	public Page<Message> getAdminOutboxPager(int pageNumber, int pageSize,String orderBy, String orderType, String property, String keyword) {
 
 		String select = " select  m.* ";
-		String sqlExceptSelect = " from Message m  inner join Member mb  on m.tomember_id = mb.id where m.fromMember_id is null and m.isSaveDraftbox = ? and m.deleteStatus <> ?";
+		String sqlExceptSelect = " from message m  inner join member mb  on m.tomember_id = mb.id where m.fromMember_id is null and m.isSaveDraftbox = ? and m.deleteStatus <> ?";
 
 		if (StrKit.notBlank(property) && StrKit.notBlank(keyword)) {
 			sqlExceptSelect += "and " + property + " like '%" + keyword + "%'";

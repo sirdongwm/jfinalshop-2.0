@@ -11,7 +11,6 @@ import com.jfinalshop.model.Product.WeightUnit;
  * 实体类 - 订单
  * 
  */
-
 public class Orders extends Model<Orders> {
 
 	private static final long serialVersionUID = 2186711390821790352L;
@@ -93,7 +92,7 @@ public class Orders extends Model<Orders> {
 	 * @return 未处理订单数
 	 */
 	public Long getUnprocessedOrderCount() {
-		String sql = "select count(*) from Orders where orderStatus = ?";
+		String sql = "select count(*) from orders where orderStatus = ?";
 		return Db.queryLong(sql,OrderStatus.valueOf(OrderStatus.unprocessed.name()).ordinal());
 	}
 	
@@ -103,7 +102,7 @@ public class Orders extends Model<Orders> {
 	 * @return 已支付未发货订单数
 	 */
 	public Long getPaidUnshippedOrderCount() {
-		String sql = "select count(*) from Orders  where paymentStatus = ? and shippingStatus = ? and orderStatus != ? and orderStatus != ?";
+		String sql = "select count(*) from orders  where paymentStatus = ? and shippingStatus = ? and orderStatus != ? and orderStatus != ?";
 		return Db.queryLong(sql,PaymentStatus.valueOf(PaymentStatus.paid.name()).ordinal(),ShippingStatus.valueOf(ShippingStatus.unshipped.name()).ordinal(),OrderStatus.valueOf(OrderStatus.completed.name()).ordinal(),OrderStatus.valueOf(OrderStatus.invalid.name()).ordinal());
 	}
 	
@@ -115,7 +114,7 @@ public class Orders extends Model<Orders> {
 	 * @return 订单编号
 	 */
 	public String getLastOrderSn() {
-		String sql = "select * from Orders  order by createDate desc";
+		String sql = "select * from orders  order by createDate desc";
 		Orders order =  dao.findFirst(sql);
 		if (order != null) {
 			return order.getStr("orderSn");
