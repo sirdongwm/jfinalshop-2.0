@@ -49,4 +49,4 @@ Ray | 支付宝捐助 | ￥50 | 2015-10-19 22:36 | 作者辛苦，第一笔捐�
 昭强 | 支付宝捐助 | ￥300 | 2015-10-08 21:34 | 今支持国产开源，小红加油  
 佐佑 | 支付宝捐助 | ￥50 | 2015-10-08 21:29 | 今天才关注这个项目，加油！
 ----------------------------------------------------
-![支付宝](http://www.jfinalshop.com/resources/admin/images/pay.jpg) 
+![微信支付](http://www.jfinalshop.com/resources/admin/images/weixin.png) WeChat & Alipay  ![支付定支付](http://www.jfinalshop.com/resources/admin/images/alipay.png) 
