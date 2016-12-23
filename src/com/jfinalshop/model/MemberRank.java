@@ -22,7 +22,7 @@ public class MemberRank extends Model<MemberRank>{
 	public MemberRank getDefaultMemberRank() {
 		MemberRank defaultMemberRank = dao.findFirst("select * from memberrank where isDefault=? limit 1",1);
 		if(defaultMemberRank == null) {
-			defaultMemberRank = dao.findFirst("select * from memberrank order by memberRank.createDate asc");
+			defaultMemberRank = dao.findFirst("select * from MemberRank order by memberRank.createDate asc");
 		}
 		return defaultMemberRank;
 	}
@@ -32,7 +32,7 @@ public class MemberRank extends Model<MemberRank>{
 	 * 
 	 */
 	public MemberRank getUpMemberRankByPoint(Integer point) {
-		String sql = "select * from memberrank  where point <= ? order by point desc";
+		String sql = "select * from MemberRank  where point <= ? order by point desc";
 		return dao.findFirst(sql,point);
 	}
 	
@@ -42,7 +42,7 @@ public class MemberRank extends Model<MemberRank>{
 	 * 
 	 */
 	public MemberRank getMemberRankByPoint(Integer point) {
-		String sql = "select * from memberrank  where memberRank.point = ?";
+		String sql = "select * from MemberRank  where memberRank.point = ?";
 		return dao.findFirst(sql, point);
 	}
 	
@@ -52,7 +52,7 @@ public class MemberRank extends Model<MemberRank>{
 	 */
 	public void save(MemberRank memberRank) {
 		if (memberRank.getBoolean("isDefault")) {
-			String sql = "select * from memberrank where memberRank.isDefault = ?";
+			String sql = "select * from MemberRank where memberRank.isDefault = ?";
 			List<MemberRank> memberRankList = dao.find(sql,1);
 			if (memberRankList != null) {
 				for (MemberRank r : memberRankList) {
@@ -71,7 +71,7 @@ public class MemberRank extends Model<MemberRank>{
 	 */
 	public void update(MemberRank memberRank) {
 		if (memberRank.getBoolean("isDefault")) {
-			String sql = "select * from memberrank where memberRank.isDefault = ?";
+			String sql = "select * from MemberRank where memberRank.isDefault = ?";
 			List<MemberRank> memberRankList = dao.find(sql,true);
 			if (memberRankList != null) {
 				for (MemberRank r : memberRankList) {

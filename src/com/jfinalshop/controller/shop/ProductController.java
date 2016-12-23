@@ -71,6 +71,9 @@ public class ProductController extends Controller {
 		setAttr("newProductList", newProductList);
 		setAttr("pathList", pathList);
 		
+		setAttr("orderType", orderType);
+		setAttr("pageSize", pageSize);
+		
 		if (StringUtils.equalsIgnoreCase(viewType, "tableType")) {
 			render("/shop/product_table_list.html");
 		} else {
@@ -105,6 +108,10 @@ public class ProductController extends Controller {
 		setAttr("hotProductList", hotProductList);
 		setAttr("bestProductList", bestProductList);
 		setAttr("newProductList", newProductList);
+		setAttr("keyword", keyword);//TODO:SUN.AO将搜索的关键词再返回到前台
+		
+		setAttr("orderType", orderType);
+		setAttr("pageSize", pageSize);
 		
 		if (StringUtils.equalsIgnoreCase(viewType, "tableType")) {
 			render("/shop/product_table_search.html");

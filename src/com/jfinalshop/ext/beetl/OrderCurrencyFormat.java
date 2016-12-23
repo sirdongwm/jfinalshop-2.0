@@ -12,6 +12,7 @@ public class OrderCurrencyFormat implements Format {
 	 * 获取订单价格货币格式字符串
 	 * 
 	 */
+	@Override
 	public Object format(Object data, String pattern) {
 		if (data == null) {
 			return null;

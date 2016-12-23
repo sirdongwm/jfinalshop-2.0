@@ -40,7 +40,7 @@ public class Reship extends Model<Reship>{
 	 * @return 退货编号
 	 */
 	public String getLastReshipSn() {
-		String sql = "select * from reship  order by createDate desc";
+		String sql = "select * from Reship  order by createDate desc";
 		Reship reshipList =  dao.findFirst(sql);
 		if (reshipList != null) {
 			return reshipList.getStr("reshipSn");

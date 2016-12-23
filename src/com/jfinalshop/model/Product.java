@@ -154,7 +154,7 @@ public class Product extends Model<Product>{
 	 * @return 最新商品集合
 	 */
 	public List<Product> getNewProductList(int maxResults) {
-		String sql = "select * from product  where isMarketable = ? and isNew = ? order by product.createDate desc limit 0,?";
+		String sql = "select * from Product  where isMarketable = ? and isNew = ? order by product.createDate desc limit 0,?";
 		return dao.find(sql,true,true,maxResults);
 	}
 
@@ -189,7 +189,7 @@ public class Product extends Model<Product>{
 	 * @return 所有热卖商品集合
 	 */
 	public List<Product> getHotProductList(int maxResults) {
-		String sql = "select * from product  where isMarketable = ? and isHot = ? order by product.createDate desc limit 0,?";
+		String sql = "select * from Product  where isMarketable = ? and isHot = ? order by product.createDate desc limit 0,?";
 		return dao.find(sql,true,true,maxResults);
 	}
 
@@ -225,7 +225,7 @@ public class Product extends Model<Product>{
 	 * @return 所有精品商品集合
 	 */
 	public List<Product> getBestProductList(int maxResults) {
-		String sql = "select * from product  where isMarketable = ? and isBest = ? order by product.createDate desc limit 0,?";
+		String sql = "select * from Product  where isMarketable = ? and isBest = ? order by product.createDate desc limit 0,?";
 		return dao.find(sql,true,true,maxResults);
 	}
 
@@ -302,7 +302,7 @@ public class Product extends Model<Product>{
 	 * @return 此分类下的所有商品集合
 	 */
 	public List<Product> getProductList(int firstResult, int maxResults) {
-		String sql = "select * from product where isMarketable = ? order by createDate desc limit ?,?";
+		String sql = "select * from Product where isMarketable = ? order by createDate desc limit ?,?";
 		return dao.find(sql, true, firstResult, maxResults);
 	}
 	
@@ -325,16 +325,16 @@ public class Product extends Model<Product>{
 	 */
 	public List<Product> getProductList(Date beginDate, Date endDate, int firstResult, int maxResults) {
 		if (beginDate != null && endDate == null) {
-			String sql = "select * from product where isMarketable = ? and createDate > ? order by createDate desc limit ?,?";
+			String sql = "select * from Product where isMarketable = ? and createDate > ? order by createDate desc limit ?,?";
 			return dao.find(sql,true,beginDate,firstResult,maxResults);
 		} else if (endDate != null && beginDate == null) {
-			String sql = "select * from product  where isMarketable = ? and createDate < ? order by createDate desc limit ?,?";
+			String sql = "select * from Product  where isMarketable = ? and createDate < ? order by createDate desc limit ?,?";
 			return dao.find(sql, true, endDate, firstResult, maxResults);
 		} else if (endDate != null && beginDate != null) {
-			String sql = "select * from product where isMarketable = ? and createDate > ? and createDate < ? order by product.createDate desc limit ?,?";
+			String sql = "select * from Product where isMarketable = ? and createDate > ? and createDate < ? order by product.createDate desc limit ?,?";
 			return dao.find(sql, true, beginDate, endDate, firstResult, maxResults);
 		} else {
-			String sql = "select *from product  where isMarketable = ? order by createDate desc limit ?,?";
+			String sql = "select *from Product  where isMarketable = ? order by createDate desc limit ?,?";
 			return dao.find(sql, true, firstResult, maxResults);
 		}
 	}
@@ -404,7 +404,7 @@ public class Product extends Model<Product>{
 			set("productImageListStore", null);
 			return;
 		}
-		String jsonText = JSON.toJSONString(productImageList, true);
+		String jsonText = JSON.toJSONString(productImageList);
 		set("productImageListStore", jsonText);
 	}
 		
@@ -494,7 +494,7 @@ public class Product extends Model<Product>{
 	 * @return 商品库存报警数
 	 */
 	public Long getStoreAlertCount() {
-		String sql = "select count(*) from product  where isMarketable = ? and store - freezeStore <= ?";
+		String sql = "select count(*) from Product  where isMarketable = ? and store - freezeStore <= ?";
 		return Db.queryLong(sql, true, SystemConfigUtil.getSystemConfig().getStoreAlertCount());
 	}
 	
@@ -504,7 +504,7 @@ public class Product extends Model<Product>{
 	 * @return 已上架商品数
 	 */
 	public Long getMarketableProductCount() {
-		String sql = "select count(*) from product  where isMarketable = ?";
+		String sql = "select count(*) from Product  where isMarketable = ?";
 		return Db.queryLong(sql,true);
 	}
 	
@@ -514,7 +514,7 @@ public class Product extends Model<Product>{
 	 * @return 已下架商品数
 	 */
 	public Long getUnMarketableProductCount() {
-		String sql = "select count(*) from product  where isMarketable = ?";
+		String sql = "select count(*) from Product  where isMarketable = ?";
 		return Db.queryLong(sql,false);
 	}
 	

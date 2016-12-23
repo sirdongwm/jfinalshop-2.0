@@ -42,6 +42,12 @@ public class FavoriteController extends BaseShopController<Product>{
 			return;
 		}
 		Member loginMember = getLoginMember();
+		if (loginMember == null) {
+			//TODO:SUN.AO表示没有登录，而收藏商品必须登录后操作，清空缓存
+			removeCookie(Member.LOGIN_MEMBER_USERNAME_COOKIE_NAME, getRequest().getContextPath() + "/");
+			ajaxJsonErrorMessage("商品收藏失败!");
+			return;
+		}
 		
 		List<Product> favoriteProductList = loginMember.getFavoriteProductList();
 		
@@ -67,6 +73,7 @@ public class FavoriteController extends BaseShopController<Product>{
 				redirect("/shop/favorite/list");
 			} else{
 				ajaxJsonErrorMessage("删除失败!");
+				return;
 			}
 		}
 		

@@ -25,7 +25,7 @@ public class LogConfig extends Model<LogConfig> {
 	 * @return LogConfig对象集合
 	 */
 	public List<LogConfig> getLogConfigList(String actionClassName) {
-		String sql = "select * from logconfig  where actionClassName = ?";
+		String sql = "select * from LogConfig  where actionClassName = ?";
 		return dao.find(sql,actionClassName);
 	}
 	

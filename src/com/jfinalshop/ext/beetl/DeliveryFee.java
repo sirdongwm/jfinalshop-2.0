@@ -12,6 +12,7 @@ public class DeliveryFee implements Function{
 	 * 
 	 * @return 配送费用
 	 */
+	@Override
 	public Object call(Object[] obj, Context ctx) {
 		if (obj[0] == null || obj[1] == null){
 			return null;

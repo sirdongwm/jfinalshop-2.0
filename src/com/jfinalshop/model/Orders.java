@@ -11,13 +11,14 @@ import com.jfinalshop.model.Product.WeightUnit;
  * 实体类 - 订单
  * 
  */
+
 public class Orders extends Model<Orders> {
 
 	private static final long serialVersionUID = 2186711390821790352L;
 	
 	public static final Orders dao = new Orders();
 
-	public static final int DEFAULT_ORDER_LIST_PAGE_SIZE = 15;// 订单列表默认每页显示数
+	public static final int DEFAULT_ORDER_LIST_PAGE_SIZE = 10;// 订单列表默认每页显示数
 
 	// 订单状态（未处理、已处理、已完成、已作废）
 	public enum OrderStatus {
@@ -92,7 +93,7 @@ public class Orders extends Model<Orders> {
 	 * @return 未处理订单数
 	 */
 	public Long getUnprocessedOrderCount() {
-		String sql = "select count(*) from orders where orderStatus = ?";
+		String sql = "select count(*) from Orders where orderStatus = ?";
 		return Db.queryLong(sql,OrderStatus.valueOf(OrderStatus.unprocessed.name()).ordinal());
 	}
 	
@@ -102,7 +103,7 @@ public class Orders extends Model<Orders> {
 	 * @return 已支付未发货订单数
 	 */
 	public Long getPaidUnshippedOrderCount() {
-		String sql = "select count(*) from orders  where paymentStatus = ? and shippingStatus = ? and orderStatus != ? and orderStatus != ?";
+		String sql = "select count(*) from Orders  where paymentStatus = ? and shippingStatus = ? and orderStatus != ? and orderStatus != ?";
 		return Db.queryLong(sql,PaymentStatus.valueOf(PaymentStatus.paid.name()).ordinal(),ShippingStatus.valueOf(ShippingStatus.unshipped.name()).ordinal(),OrderStatus.valueOf(OrderStatus.completed.name()).ordinal(),OrderStatus.valueOf(OrderStatus.invalid.name()).ordinal());
 	}
 	
@@ -114,7 +115,7 @@ public class Orders extends Model<Orders> {
 	 * @return 订单编号
 	 */
 	public String getLastOrderSn() {
-		String sql = "select * from orders  order by createDate desc";
+		String sql = "select * from Orders  order by createDate desc";
 		Orders order =  dao.findFirst(sql);
 		if (order != null) {
 			return order.getStr("orderSn");

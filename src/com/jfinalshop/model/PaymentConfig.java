@@ -111,7 +111,7 @@ public class PaymentConfig extends Model<PaymentConfig>{
 	 * 
 	 */
 	public List<PaymentConfig> getNonDepositOfflinePaymentConfigList() {
-		String sql = "select * from paymentconfig where paymentConfigType != ? and paymentConfigType != ? order by orderList asc";
+		String sql = "select * from PaymentConfig where paymentConfigType != ? and paymentConfigType != ? order by orderList asc";
 		return dao.find(sql,PaymentConfigType.valueOf(PaymentConfigType.deposit.name()).ordinal(),PaymentConfigType.valueOf(PaymentConfigType.offline.name()).ordinal());
 	}
 	

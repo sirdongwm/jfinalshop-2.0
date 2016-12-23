@@ -14,7 +14,7 @@ public class Message extends Model<Message>{
 	
 	public static final Message dao = new Message();
 
-	public static final int DEFAULT_MESSAGE_LIST_PAGE_SIZE = 12;// 消息列表默认每页显示数
+	public static final int DEFAULT_MESSAGE_LIST_PAGE_SIZE = 10;// 消息列表默认每页显示数
 
 	// 删除状态（未删除、发送者删除、接收者删除）
 	public enum DeleteStatus {
@@ -28,7 +28,7 @@ public class Message extends Model<Message>{
 	public Page<Message> getAdminInboxPager(int pageNumber, int pageSize,String orderBy, String orderType, String property, String keyword) {
 
 		String select = " select  m.*";
-		String sqlExceptSelect = " from message m inner join member mb on m.fromMember_id = mb.id where m.tomember_id is null and m.isSaveDraftbox = ? and m.deleteStatus <> ? "; 
+		String sqlExceptSelect = " from Message m inner join Member mb on m.fromMember_id = mb.id where m.tomember_id is null and m.isSaveDraftbox = ? and m.deleteStatus <> ? "; 
 
 		if (StrKit.notBlank(property) && StrKit.notBlank(keyword)) {
 			sqlExceptSelect += " and " + property + " like '%" + keyword + "%'";
@@ -51,7 +51,7 @@ public class Message extends Model<Message>{
 	public Page<Message> getAdminOutboxPager(int pageNumber, int pageSize,String orderBy, String orderType, String property, String keyword) {
 
 		String select = " select  m.* ";
-		String sqlExceptSelect = " from message m  inner join member mb  on m.tomember_id = mb.id where m.fromMember_id is null and m.isSaveDraftbox = ? and m.deleteStatus <> ?";
+		String sqlExceptSelect = " from Message m  inner join Member mb  on m.tomember_id = mb.id where m.fromMember_id is null and m.isSaveDraftbox = ? and m.deleteStatus <> ?";
 
 		if (StrKit.notBlank(property) && StrKit.notBlank(keyword)) {
 			sqlExceptSelect += "and " + property + " like '%" + keyword + "%'";
@@ -76,8 +76,7 @@ public class Message extends Model<Message>{
 		String sqlExceptSelect = " from message where toMember_id = ? and isSaveDraftbox = ? and deleteStatus <> ? ";
 
 		sqlExceptSelect += " order by createDate desc ";
-		
-		Page<Message> pager = dao.paginate(pageNumber, pageSize, select, sqlExceptSelect,member.getStr("id"),false,DeleteStatus.valueOf(DeleteStatus.fromDelete.name()).ordinal());
+		Page<Message> pager = dao.paginate(pageNumber, pageSize, select, sqlExceptSelect,member.getStr("id"),false,DeleteStatus.valueOf(DeleteStatus.toDelete.name()).ordinal());
 		return pager;
 	}
 	
@@ -87,7 +86,7 @@ public class Message extends Model<Message>{
 	 */
 	public Page<Message> getMemberDraftboxPager(int pageNumber, int pageSize,Member member) {
 		String select = "select * ";
-		String sqlExceptSelect = " from message where toMember_id = ? and isSaveDraftbox = ? and deleteStatus <> ? ";
+		String sqlExceptSelect = " from message where fromMember_id = ? and isSaveDraftbox = ? and deleteStatus <> ? ";
 
 		sqlExceptSelect += " order by createDate desc ";
 		

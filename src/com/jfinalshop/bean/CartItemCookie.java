@@ -6,8 +6,7 @@ package com.jfinalshop.bean;
  * 
  */
 
-public class
-CartItemCookie {
+public class CartItemCookie {
 	
 	public static final String CART_ITEM_LIST_COOKIE_NAME = "cartItemList";// 保存未登录会员购物车项集合的Cookie名称
 	public static final int CART_ITEM_LIST_COOKIE_MAX_AGE = 86400;// 保存未登录会员购物车项集合的Cookie最大有效时间（单位：秒）
@@ -30,5 +29,5 @@ CartItemCookie {
 	public void setQ(Integer q) {
 		this.q = q;
 	}
-
+	
 }

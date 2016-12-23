@@ -50,28 +50,22 @@ public class CartItemController extends BaseShopController<CartItem>{
 		totalPoint = 0;
 		totalPrice = new BigDecimal("0");
 		if (loginMember == null) {
-			Cookie[] cookies = getRequest().getCookies();
-			if (cookies != null && cookies.length > 0) {
-				for (Cookie cookie : cookies) {
-					if (StringUtils.equalsIgnoreCase(cookie.getName(), CartItemCookie.CART_ITEM_LIST_COOKIE_NAME)) {
-						if (StringUtils.isNotEmpty(cookie.getValue())) {
-							JSONArray jsonArray = JSON.parseArray(cookie.getValue());
-							List<CartItemCookie> cartItemCookieList = JSON.parseArray(jsonArray.toJSONString(), CartItemCookie.class);
-							for (CartItemCookie cartItemCookie : cartItemCookieList) {
-								Product product = Product.dao.findById(cartItemCookie.getI());
-								if (product != null) {
-									totalQuantity += cartItemCookie.getQ();
-									if (getSystemConfig().getPointType() == PointType.productSet) {
-										totalPoint = product.getInt("point") * cartItemCookie.getQ() + totalPoint;
-									}
-									totalPrice = product.getPreferentialPrice(getLoginMember()).multiply(new BigDecimal(cartItemCookie.getQ().toString())).add(totalPrice);
-									CartItem cartItem = new CartItem();
-									cartItem.set("product_id",product.getStr("id"));
-									cartItem.set("quantity",cartItemCookie.getQ());
-									cartItemList.add(cartItem);
-								}
-							}
+			Cookie cookie = getCookieObject(CartItemCookie.CART_ITEM_LIST_COOKIE_NAME);
+			if (cookie != null && StringUtils.isNotEmpty(cookie.getValue())) {
+				JSONArray jsonArray = JSON.parseArray(cookie.getValue());
+				List<CartItemCookie> cartItemCookieList = JSON.parseArray(jsonArray.toJSONString(), CartItemCookie.class);
+				for (CartItemCookie cartItemCookie : cartItemCookieList) {
+					Product product = Product.dao.findById(cartItemCookie.getI());
+					if (product != null) {
+						totalQuantity += cartItemCookie.getQ();
+						if (getSystemConfig().getPointType() == PointType.productSet) {
+							totalPoint = product.getInt("point") * cartItemCookie.getQ() + totalPoint;
 						}
+						totalPrice = product.getPreferentialPrice(getLoginMember()).multiply(new BigDecimal(cartItemCookie.getQ().toString())).add(totalPrice);
+						CartItem cartItem = new CartItem();
+						cartItem.set("product_id",product.getStr("id"));
+						cartItem.set("quantity",cartItemCookie.getQ());
+						cartItemList.add(cartItem);
 					}
 				}
 			}
@@ -109,6 +103,7 @@ public class CartItemController extends BaseShopController<CartItem>{
 		product = Product.dao.findById(id);
 		if (product == null && !product.getBoolean("isMarketable")) {
 			ajaxJsonErrorMessage("此商品已下架!");
+			return;
 		}
 		if (quantity == null || quantity < 1) {
 			quantity = 1;
@@ -119,29 +114,24 @@ public class CartItemController extends BaseShopController<CartItem>{
 		if (loginMember == null) {
 			List<CartItemCookie> cartItemCookieList = new ArrayList<CartItemCookie>();
 			boolean isExist = false;
-			Cookie[] cookies = getRequest().getCookies();
-			if (cookies != null && cookies.length > 0) {
-				for (Cookie cookie : cookies) {
-					if (StringUtils.equalsIgnoreCase(cookie.getName(), CartItemCookie.CART_ITEM_LIST_COOKIE_NAME)) {
-						if (StringUtils.isNotEmpty(cookie.getValue())) {
-							JSONArray jsonArray = JSON.parseArray(cookie.getValue());
-							List<CartItemCookie> previousCartItemCookieList = JSON.parseArray(jsonArray.toJSONString(), CartItemCookie.class);
+			Cookie cookie = getCookieObject(CartItemCookie.CART_ITEM_LIST_COOKIE_NAME);
+			if (cookie != null && StringUtils.isNotEmpty(cookie.getValue())) {
+				JSONArray jsonArray = JSON.parseArray(cookie.getValue());
+				List<CartItemCookie> previousCartItemCookieList = JSON.parseArray(jsonArray.toJSONString(), CartItemCookie.class);
 							
-							for (CartItemCookie previousCartItemCookie : previousCartItemCookieList) {
-								Product cartItemCookieProduct = Product.dao.findById(previousCartItemCookie.getI());
-								if (StringUtils.equals(previousCartItemCookie.getI(), id)) {
-									isExist = true;
-									previousCartItemCookie.setQ(previousCartItemCookie.getQ() + quantity);
-									if (product.getInt("store") != null && (product.getInt("freezeStore") + previousCartItemCookie.getQ()) > product.getInt("store")) {
-										ajaxJsonErrorMessage("添加购物车失败，商品库存不足!");
-									}
-								}
-								cartItemCookieList.add(previousCartItemCookie);
-								totalQuantity += previousCartItemCookie.getQ();
-								totalPrice =  cartItemCookieProduct.getPreferentialPrice(getLoginMember()).multiply(new BigDecimal(previousCartItemCookie.getQ().toString())).add(totalPrice);
-							}
+				for (CartItemCookie previousCartItemCookie : previousCartItemCookieList) {
+					Product cartItemCookieProduct = Product.dao.findById(previousCartItemCookie.getI());
+					if (StringUtils.equals(previousCartItemCookie.getI(), id)) {
+						isExist = true;
+						previousCartItemCookie.setQ(previousCartItemCookie.getQ() + quantity);
+						if (product.getInt("store") != null && (product.getInt("freezeStore") + previousCartItemCookie.getQ()) > product.getInt("store")) {
+							ajaxJsonErrorMessage("添加购物车失败，商品库存不足!");
+							return;
 						}
 					}
+					cartItemCookieList.add(previousCartItemCookie);
+					totalQuantity += previousCartItemCookie.getQ();
+					totalPrice =  cartItemCookieProduct.getPreferentialPrice(getLoginMember()).multiply(new BigDecimal(previousCartItemCookie.getQ().toString())).add(totalPrice);
 				}
 			}
 			if (!isExist) {
@@ -153,6 +143,7 @@ public class CartItemController extends BaseShopController<CartItem>{
 				totalPrice =  product.getPreferentialPrice(getLoginMember()).multiply(new BigDecimal(quantity.toString())).add(totalPrice);
 				if (product.getInt("store") != null && (product.getInt("freezeStore") + cartItemCookie.getQ()) > product.getInt("store")) {
 					ajaxJsonErrorMessage("添加购物车失败，商品库存不足!");
+					return;
 				}
 			}
 			for (CartItemCookie cartItemCookie : cartItemCookieList) {
@@ -160,14 +151,12 @@ public class CartItemController extends BaseShopController<CartItem>{
 					Product cartItemCookieProduct = Product.dao.findById(cartItemCookie.getI());
 					if (product.getInt("store") != null && (cartItemCookieProduct.getInt("freezeStore") + cartItemCookie.getQ()) > cartItemCookieProduct.getInt("store")) {
 						ajaxJsonErrorMessage("添加购物车失败，商品库存不足!");
+						return;
 					}
 				}
 			}
-			String jsonText = JSON.toJSONString(cartItemCookieList,true);
-			Cookie cookie = new Cookie(CartItemCookie.CART_ITEM_LIST_COOKIE_NAME, jsonText);
-			cookie.setPath(getRequest().getContextPath() + "/");
-			cookie.setMaxAge(CartItemCookie.CART_ITEM_LIST_COOKIE_MAX_AGE);
-			getResponse().addCookie(cookie);
+			String jsonText = JSON.toJSONString(cartItemCookieList);
+			setCookie(CartItemCookie.CART_ITEM_LIST_COOKIE_NAME, jsonText, CartItemCookie.CART_ITEM_LIST_COOKIE_MAX_AGE, getRequest().getContextPath() + "/");
 		} else {
 			boolean isExist = false;
 			List<CartItem> previousCartItemList = loginMember.getCartItemList();
@@ -178,6 +167,7 @@ public class CartItemController extends BaseShopController<CartItem>{
 						previousCartItem.set("quantity",previousCartItem.getInt("quantity") + quantity);
 						if (product.getInt("store") != null && (product.getInt("freezeStore") + previousCartItem.getInt("quantity")) > product.getInt("store")) {
 							ajaxJsonErrorMessage("添加购物车失败，商品库存不足!");
+							return;
 						}
 						previousCartItem.update();
 					}
@@ -194,6 +184,7 @@ public class CartItemController extends BaseShopController<CartItem>{
 				cartItem.set("quantity",quantity);
 				if (product.getInt("store") != null && (product.getInt("freezeStore") + cartItem.getInt("quantity")) > product.getInt("store")) {
 					ajaxJsonErrorMessage("添加购物车失败，商品库存不足!");
+					return;
 				}
 				cartItem.save();
 				totalQuantity += quantity;
@@ -219,30 +210,23 @@ public class CartItemController extends BaseShopController<CartItem>{
 		totalQuantity = 0;
 		totalPrice = new BigDecimal("0");
 		if (loginMember == null) {
-			Cookie[] cookies = getRequest().getCookies();
-			if (cookies != null && cookies.length > 0) {
-				for (Cookie cookie : cookies) {
-					if (StringUtils.equalsIgnoreCase(cookie.getName(), CartItemCookie.CART_ITEM_LIST_COOKIE_NAME)) {
-						if (StringUtils.isNotEmpty(cookie.getValue())) {
-							
-							JSONArray jsonArray = JSON.parseArray(cookie.getValue());
-							List<CartItemCookie> cartItemCookieList = JSON.parseArray(jsonArray.toJSONString(), CartItemCookie.class);
-							for (CartItemCookie cartItemCookie : cartItemCookieList) {
-								Product product = Product.dao.findById(cartItemCookie.getI());
-								if (product != null) {
-									totalQuantity += cartItemCookie.getQ();
-									totalPrice = product.getPreferentialPrice(getLoginMember()).multiply(new BigDecimal(cartItemCookie.getQ().toString())).add(totalPrice);
-									DecimalFormat decimalFormat = new DecimalFormat(getPriceCurrencyFormat());
-									String priceString = decimalFormat.format(product.getPreferentialPrice(getLoginMember()));
-									Map<String, String> jsonMap = new HashMap<String, String>();
-									jsonMap.put("name", product.getStr("Name"));
-									jsonMap.put("price", priceString);
-									jsonMap.put("quantity", cartItemCookie.getQ().toString());
-									jsonMap.put("htmlFilePath", product.getStr("htmlFilePath"));
-									jsonList.add(jsonMap);
-								}
-							}
-						}
+			Cookie cookie = getCookieObject(CartItemCookie.CART_ITEM_LIST_COOKIE_NAME);
+			if (cookie != null && StringUtils.isNotEmpty(cookie.getValue())) {
+				JSONArray jsonArray = JSON.parseArray(cookie.getValue());
+				List<CartItemCookie> cartItemCookieList = JSON.parseArray(jsonArray.toJSONString(), CartItemCookie.class);
+				for (CartItemCookie cartItemCookie : cartItemCookieList) {
+					Product product = Product.dao.findById(cartItemCookie.getI());
+					if (product != null) {
+						totalQuantity += cartItemCookie.getQ();
+						totalPrice = product.getPreferentialPrice(getLoginMember()).multiply(new BigDecimal(cartItemCookie.getQ().toString())).add(totalPrice);
+						DecimalFormat decimalFormat = new DecimalFormat(getPriceCurrencyFormat());
+						String priceString = decimalFormat.format(product.getPreferentialPrice(getLoginMember()));
+						Map<String, String> jsonMap = new HashMap<String, String>();
+						jsonMap.put("name", product.getStr("Name"));
+						jsonMap.put("price", priceString);
+						jsonMap.put("quantity", cartItemCookie.getQ().toString());
+						jsonMap.put("htmlFilePath", product.getStr("htmlFilePath"));
+						jsonList.add(jsonMap);
 					}
 				}
 			}
@@ -287,38 +271,30 @@ public class CartItemController extends BaseShopController<CartItem>{
 		totalPrice = new BigDecimal("0");
 		BigDecimal subtotalPrice = new BigDecimal("0");
 		if (loginMember == null) {
-			Cookie[] cookies = getRequest().getCookies();
-			if (cookies != null && cookies.length > 0) {
-				for (Cookie cookie : cookies) {
-					if (StringUtils.equalsIgnoreCase(cookie.getName(), CartItemCookie.CART_ITEM_LIST_COOKIE_NAME)) {
-						if (StringUtils.isNotEmpty(cookie.getValue())) {
-							JSONArray jsonArray = JSON.parseArray(cookie.getValue());
-							List<CartItemCookie> cartItemCookieList = JSON.parseArray(jsonArray.toJSONString(), CartItemCookie.class);
-							Iterator<CartItemCookie> iterator = cartItemCookieList.iterator();
-							while (iterator.hasNext()) {
-								CartItemCookie cartItemCookie = iterator.next();
-								Product product = Product.dao.findById(cartItemCookie.getI());
-								if (StringUtils.equals(id, cartItemCookie.getI())) {
-									cartItemCookie.setQ(quantity);
-									subtotalPrice = product.getPreferentialPrice(getLoginMember()).multiply(new BigDecimal(quantity));
-									if (product.getInt("store") != null && (product.getInt("freezeStore") + cartItemCookie.getQ()) > product.getInt("store")) {
-										ajaxJsonErrorMessage("商品库存不足！");
-									}
-								}
-								totalQuantity += cartItemCookie.getQ();
-								if (getSystemConfig().getPointType() == PointType.productSet) {
-									totalPoint = product.getInt("point") * cartItemCookie.getQ() + totalPoint;
-								}
-								totalPrice = product.getPreferentialPrice(getLoginMember()).multiply(new BigDecimal(cartItemCookie.getQ().toString())).add(totalPrice);
-							}
-							String jsonText = JSON.toJSONString(cartItemCookieList,true);
-							Cookie newCookie = new Cookie(CartItemCookie.CART_ITEM_LIST_COOKIE_NAME, jsonText);
-							newCookie.setPath(getRequest().getContextPath() + "/");
-							newCookie.setMaxAge(CartItemCookie.CART_ITEM_LIST_COOKIE_MAX_AGE);
-							getResponse().addCookie(newCookie);
+			Cookie cookie = getCookieObject(CartItemCookie.CART_ITEM_LIST_COOKIE_NAME);
+			if (cookie != null && StringUtils.isNotEmpty(cookie.getValue())) {
+				JSONArray jsonArray = JSON.parseArray(cookie.getValue());
+				List<CartItemCookie> cartItemCookieList = JSON.parseArray(jsonArray.toJSONString(), CartItemCookie.class);
+				Iterator<CartItemCookie> iterator = cartItemCookieList.iterator();
+				while (iterator.hasNext()) {
+					CartItemCookie cartItemCookie = iterator.next();
+					Product product = Product.dao.findById(cartItemCookie.getI());
+					if (StringUtils.equals(id, cartItemCookie.getI())) {
+						cartItemCookie.setQ(quantity);
+						subtotalPrice = product.getPreferentialPrice(getLoginMember()).multiply(new BigDecimal(quantity));
+						if (product.getInt("store") != null && (product.getInt("freezeStore") + cartItemCookie.getQ()) > product.getInt("store")) {
+							ajaxJsonErrorMessage("商品库存不足！");
+							return;
 						}
 					}
+					totalQuantity += cartItemCookie.getQ();
+					if (getSystemConfig().getPointType() == PointType.productSet) {
+						totalPoint = product.getInt("point") * cartItemCookie.getQ() + totalPoint;
+					}
+					totalPrice = product.getPreferentialPrice(getLoginMember()).multiply(new BigDecimal(cartItemCookie.getQ().toString())).add(totalPrice);
 				}
+				String jsonText = JSON.toJSONString(cartItemCookieList);
+				setCookie(CartItemCookie.CART_ITEM_LIST_COOKIE_NAME, jsonText, CartItemCookie.CART_ITEM_LIST_COOKIE_MAX_AGE, getRequest().getContextPath() + "/");
 			}
 		} else {
 			cartItemList = loginMember.getCartItemList();
@@ -329,6 +305,7 @@ public class CartItemController extends BaseShopController<CartItem>{
 						cartItem.set("quantity",quantity);
 						if (product.getInt("store") != null && (product.getInt("freezeStore") + cartItem.getInt("quantity")) > product.getInt("store")) {
 							ajaxJsonErrorMessage("商品库存不足！");
+							return;
 						}
 						cartItem.update();
 						subtotalPrice = cartItem.getSubtotalPrice();
@@ -366,36 +343,27 @@ public class CartItemController extends BaseShopController<CartItem>{
 		totalPoint = 0;
 		totalPrice = new BigDecimal("0");
 		if (loginMember == null) {
-			Cookie[] cookies = getRequest().getCookies();
-			if (cookies != null && cookies.length > 0) {
-				for (Cookie cookie : cookies) {
-					if (StringUtils.equalsIgnoreCase(cookie.getName(), CartItemCookie.CART_ITEM_LIST_COOKIE_NAME)) {
-						if (StringUtils.isNotEmpty(cookie.getValue())) {
-							JSONArray previousJsonArray = JSON.parseArray(cookie.getValue());
-							List<CartItemCookie> cartItemCookieList = JSON.parseArray(previousJsonArray.toJSONString(), CartItemCookie.class);
-							Iterator<CartItemCookie> iterator = cartItemCookieList.iterator();
-							while (iterator.hasNext()) {
-								CartItemCookie cartItemCookie = iterator.next();
-								if (StringUtils.equals(cartItemCookie.getI(), id)) {
-									iterator.remove();
-								} else {
-									Product product = Product.dao.findById(cartItemCookie.getI());
-									totalQuantity += cartItemCookie.getQ();
-									if (getSystemConfig().getPointType() == PointType.productSet) {
-										totalPoint = product.getInt("point") * cartItemCookie.getQ() + totalPoint;
-									}
-									totalPrice = product.getPreferentialPrice(getLoginMember()).multiply(new BigDecimal(cartItemCookie.getQ().toString())).add(totalPrice);
-								}
-							}
-							
-							String jsonText = JSON.toJSONString(cartItemCookieList,true);
-							Cookie newCookie = new Cookie(CartItemCookie.CART_ITEM_LIST_COOKIE_NAME, jsonText);
-							newCookie.setPath(getRequest().getContextPath() + "/");
-							newCookie.setMaxAge(CartItemCookie.CART_ITEM_LIST_COOKIE_MAX_AGE);
-							getResponse().addCookie(newCookie);
+			Cookie cookie = getCookieObject(CartItemCookie.CART_ITEM_LIST_COOKIE_NAME);
+			if (cookie != null && StringUtils.isNotEmpty(cookie.getValue())) {
+				JSONArray previousJsonArray = JSON.parseArray(cookie.getValue());
+				List<CartItemCookie> cartItemCookieList = JSON.parseArray(previousJsonArray.toJSONString(), CartItemCookie.class);
+				Iterator<CartItemCookie> iterator = cartItemCookieList.iterator();
+				while (iterator.hasNext()) {
+					CartItemCookie cartItemCookie = iterator.next();
+					if (StringUtils.equals(cartItemCookie.getI(), id)) {
+						iterator.remove();
+					} else {
+						Product product = Product.dao.findById(cartItemCookie.getI());
+						totalQuantity += cartItemCookie.getQ();
+						if (getSystemConfig().getPointType() == PointType.productSet) {
+							totalPoint = product.getInt("point") * cartItemCookie.getQ() + totalPoint;
 						}
+						totalPrice = product.getPreferentialPrice(getLoginMember()).multiply(new BigDecimal(cartItemCookie.getQ().toString())).add(totalPrice);
 					}
 				}
+							
+				String jsonText = JSON.toJSONString(cartItemCookieList);
+				setCookie(CartItemCookie.CART_ITEM_LIST_COOKIE_NAME, jsonText, CartItemCookie.CART_ITEM_LIST_COOKIE_MAX_AGE, getRequest().getContextPath() + "/");
 			}
 		} else {
 			List<CartItem> cartItemList = loginMember.getCartItemList();
@@ -433,10 +401,7 @@ public class CartItemController extends BaseShopController<CartItem>{
 	public void ajaxClear() {
 		Member loginMember = getLoginMember();
 		if (loginMember == null) {
-			Cookie cookie = new Cookie(CartItemCookie.CART_ITEM_LIST_COOKIE_NAME, null);
-			cookie.setPath(getRequest().getContextPath() + "/");
-			cookie.setMaxAge(0);
-			getResponse().addCookie(cookie);
+			removeCookie(CartItemCookie.CART_ITEM_LIST_COOKIE_NAME, getRequest().getContextPath() + "/");
 		} else {
 			List<CartItem> cartItemSet = loginMember.getCartItemList();
 			if (cartItemSet != null) {

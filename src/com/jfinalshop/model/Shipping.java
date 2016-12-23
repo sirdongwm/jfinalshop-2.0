@@ -40,7 +40,7 @@ public class Shipping extends Model<Shipping>{
 	 * @return 发货编号
 	 */
 	public String getLastShippingSn() {
-		String sql = "select * from shipping  order by createDate desc";
+		String sql = "select * from Shipping  order by createDate desc";
 		Shipping shippingList =  dao.findFirst(sql);
 		if (shippingList != null) {
 			return shippingList.getStr("shippingSn");

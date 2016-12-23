@@ -321,6 +321,6 @@ public class AdminController extends BaseAdminController<Admin>{
 	public void list() {
 		findByPage();
 		render("/admin/admin_list.html");
-	}	
+	}
 	
 }

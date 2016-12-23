@@ -68,7 +68,7 @@ public class OrderController extends BaseAdminController<Orders>{
 		
 	// 编辑
 	public void edit() {		
-		String orderId = getPara("order.id","");		
+		String orderId = getPara("orders.id","");		
 		if (StrKit.isBlank(orderId)){
 			addActionError("订单ID不能为空！");
 			return;
@@ -88,7 +88,7 @@ public class OrderController extends BaseAdminController<Orders>{
 			return;
 		}
 		setAttr("orders", orders);
-		setAttr("allDeliveryType", DeliveryType.dao.getAllDeliveryCorp());// 获取所有配送方式
+		setAttr("allDeliveryType", DeliveryType.dao.getAll());// 获取所有配送方式
 		setAttr("allPaymentConfig", PaymentConfig.dao.getAll()); // 获取所有支付方式
 		setAttr("allWeightUnit", getAllWeightUnit()); // 获取所有重量单位
 		render("/admin/order_input.html");
@@ -144,6 +144,7 @@ public class OrderController extends BaseAdminController<Orders>{
 			addActionError("地区错误！");
 			return;
 		}
+		List<String> orderItemIds = new ArrayList<String>();
 		for (OrderItem orderItem : orderItemList) {
 			if (orderItem.getInt("productQuantity") <= 0) {
 				addActionError("商品数量错误！");
@@ -171,8 +172,11 @@ public class OrderController extends BaseAdminController<Orders>{
 					(getSystemConfig().getStoreFreezeTime() == StoreFreezeTime.ship && orders.getShippingStatus() != ShippingStatus.unshipped)) {
 					product.set("freezeStore",product.getInt("freezeStore") - orderItemPersistent.getInt("productQuantity") + orderItem.getInt("productQuantity"));
 					product.update();
+					
 				}
 			}
+			orderItem.update();//TODO:更新修改后的商品信息
+			orderItemIds.add(orderItem.getStr("id"));
 		}
 		DeliveryType deliveryType = orders.getDeliveryType();
 		PaymentConfig paymentConfig = orders.getPaymentConfig();
@@ -195,7 +199,7 @@ public class OrderController extends BaseAdminController<Orders>{
 			orderItemPersistent.update();
 		}
 		for (OrderItem orderItem : persistent.getOrderItemList()) {
-			if (!orderItemList.contains(orderItem)) {
+			if (!orderItemIds.contains(orderItem.getStr("id"))) {
 				orderItem.delete();
 			}
 		}
@@ -243,11 +247,16 @@ public class OrderController extends BaseAdminController<Orders>{
 		payment = getModel(Payment.class);
 		String orderId = getPara("orders.id","");
 		String paymentType = getPara("paymentType","");	
+		String payer = getPara("payment.payer","");	
 		
 		payment.set("paymentType", PaymentType.valueOf(paymentType).ordinal()); // 支付类型
 		
 		if (StrKit.isBlank(orderId)) {
 			addActionError("订单ID不能为空！");
+			return;
+		}
+		if (StrKit.isBlank(payer)) {
+			addActionError("付款人不能为空！");
 			return;
 		}
 		orders = Orders.dao.findById(orderId);
@@ -289,13 +298,13 @@ public class OrderController extends BaseAdminController<Orders>{
 			deposit.set("balance",member.getBigDecimal("deposit"));
 			deposit.set("member_id",member.getStr("id"));
 			deposit.save(deposit);
+			payment.set("deposit_id",deposit.getStr("id"));//TODO: 只有存在才设置
 		}
 		PaymentConfig paymentConfig = PaymentConfig.dao.findById(payment.getStr("paymentConfig_id"));
 		payment.set("paymentConfigName",paymentConfig.getStr("name"));
 		payment.set("paymentFee",new BigDecimal("0"));
 		payment.set("operator",ShiroUtils.getLoginAdminName());
 		payment.set("paymentStatus",PaymentStatus.success.ordinal());
-		payment.set("deposit_id",deposit.getStr("id"));
 		payment.set("paymentSn", SerialNumberUtil.buildPaymentSn());
 		payment.set("order_id",orders.getStr("id"));
 		payment.save(payment);
@@ -449,7 +458,7 @@ public class OrderController extends BaseAdminController<Orders>{
 		for (DeliveryItem deliveryItem : deliveryItemList) {
 			Product product = Product.dao.findById(deliveryItem.getStr("product_id"));
 			for (OrderItem orderItem : orderItemList) {
-				if (orderItem.getStr("product_id").equals(product.getStr("product_id"))) {
+				if (orderItem.getStr("product_id").equals(deliveryItem.getStr("product_id"))) {//TODO:SUN.AO 此处对比商品ID  如果用product对象取id而不是product_id
 					orderItem.set("deliveryQuantity",orderItem.getInt("deliveryQuantity") + deliveryItem.getInt("deliveryQuantity"));
 					orderItem.set("totalDeliveryQuantity",orderItem.getInt("totalDeliveryQuantity") + deliveryItem.getInt("deliveryQuantity"));
 					orderItem.update();
@@ -544,7 +553,7 @@ public class OrderController extends BaseAdminController<Orders>{
 	
 	// 作废
 	public void invalid() {
-		String orderId = getPara("order.id", "");
+		String orderId = getPara("orders.id", "");
 		if (StrKit.isBlank(orderId)) {
 			addActionError("订单ID不能空！");
 			return;
@@ -650,11 +659,11 @@ public class OrderController extends BaseAdminController<Orders>{
 			deposit.set("balance",member.getBigDecimal("deposit"));
 			deposit.set("member_id",member.getStr("id"));
 			deposit.save(deposit);
+			refund.set("deposit_id",deposit.getStr("id"));//TODO:SUN.AO 只有存在才赋值
 		}
 		PaymentConfig paymentConfig = PaymentConfig.dao.findById(refund.getStr("paymentConfig_id"));
 		refund.set("paymentConfigName",paymentConfig.getStr("name"));
 		refund.set("operator",getLoginAdminName());
-		refund.set("deposit_id",deposit.getStr("id"));
 		refund.set("order_id",orders.getStr("id"));
 		refund.set("refundSn", SerialNumberUtil.buildRefundSn());
 		refund.save(refund);
@@ -763,6 +772,12 @@ public class OrderController extends BaseAdminController<Orders>{
 					orderItem.update();
 					if (orderItem.getInt("deliveryQuantity") > deliveryItem.getInt("deliveryQuantity")) {
 						shippingStatus = ShippingStatus.partReshiped;
+					}
+					// 库存处理,退货库存数量增加
+					if (product.getInt("store") != null) {
+						product.set("freezeStore",product.getInt("freezeStore") + deliveryItem.getInt("deliveryQuantity"));
+						product.set("store",product.getInt("store") + deliveryItem.getInt("deliveryQuantity"));
+						product.update();
 					}
 				}
 			}

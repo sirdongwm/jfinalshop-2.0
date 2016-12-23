@@ -23,7 +23,7 @@ public class FriendLink extends Model<FriendLink>{
 	 * 
 	 */
 	public List<FriendLink> getPictureFriendLinkList() {
-		String sql = "select * from friendlink where logo is not null order by orderList asc ,createDate desc";
+		String sql = "select * from friendLink where logo is not null order by orderList asc ,createDate desc";
 		return dao.find(sql);
 	}
 	
@@ -34,7 +34,7 @@ public class FriendLink extends Model<FriendLink>{
 	 * 
 	 */
 	public List<FriendLink> getTextFriendLinkList() {
-		String sql = "select * from friendlink where logo is null order by orderList asc ,createDate desc";
+		String sql = "select * from friendLink where logo is null order by orderList asc ,createDate desc";
 		return dao.find(sql);
 	}
 	
@@ -52,6 +52,6 @@ public class FriendLink extends Model<FriendLink>{
 	
 	// 所有友情链接
 	public List<FriendLink> getAll(){
-		return dao.find("select * from friendlink order by orderList asc ,createDate desc");
+		return dao.find("select * from friendLink order by orderList asc ,createDate desc");
 	}
 }
