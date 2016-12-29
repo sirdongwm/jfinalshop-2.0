@@ -12,7 +12,7 @@ Ctrl + F 搜索JFinalShop
 
 ##  jfinalshop-4.0 项目说明
 
- 新版本jfinalshop4.0即将发布...
+ 新版本jfinalshop4.0即将发布... 2017-01-01
 主要模块：
 jfinalshop-api 对应android ios 接口【新增】
 jfinalshop-mobile 移动端H5商城 【新增】
@@ -35,10 +35,8 @@ jfinalshop-web 访问
 
  **尊贵版** 
 1.	pc商城,微商城,Android,IOS接口
-2.	成为开发者
-3.	随时获取最新代码
-4.	提供必要的技术支持
-5.	专属内部开发QQ群，大神云集
+2.	提供必要的技术支持
+3.	专属内部开发QQ群，大神云集
 
 
 ----------------------------------------
