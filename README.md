@@ -19,7 +19,7 @@ JFinalShop商城系统是B2C模式的电子商城，是在JFinal基础上搭建�
 6.  【系统设置】：系统设置、地区管理、支付方式、配送方式、物流公司、支付插件、存储插件、登录插件、管理员、权限管理、角色管理、发送消息、消息列表、草稿箱、日志管理。
 
 
-## 项目结构
+## JFinalShop 4.0项目结构
  **商城系统采用Maven管理，包括以下7大模块：**
  jfinalshop-api 	：项目的对外接口Android、IOS、小程序等外部接口。
  jfinalshop-mobile 	：手机商城（开发中...）。
@@ -30,7 +30,7 @@ JFinalShop商城系统是B2C模式的电子商城，是在JFinal基础上搭建�
  jfinalshop-web 	：项目的web层，页面的显示以及控制层。
 
 
-## 技术选型
+## JFinalShop 4.0技术选型
 
 1、后端
 
@@ -67,7 +67,7 @@ JFinalShop商城系统是B2C模式的电子商城，是在JFinal基础上搭建�
 
 ```
 
-## 特别说明
+## JFinalShop 4.0特别说明
 
 1. 免费下载jfinalshop 2.0入门学习，详细介绍请点[查看](https://git.oschina.net/hycx227/jfinalshop-2.0)jfinalshop2.0；
 
