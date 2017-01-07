@@ -7,7 +7,7 @@
 
 JFinalShop商城系统是B2C模式的电子商城，是在JFinal基础上搭建的一个Java项目。JFinal以易学易用著称，让您轻松打造自己的独立商城，同时也方便二次开发，让您快速搭建个性化独立商城，为您节约更多时间，去陪恋人、家人和朋友。
 
-## 4.0系统功能简介
+## JFinalShop 4.0系统功能简介
 
  **功能列表**
 1.	【商品管理】：商品管理、库存管理、商品分类、商品参数、商品属性、规格管理、品牌管理、到货通知。
@@ -69,8 +69,8 @@ JFinalShop商城系统是B2C模式的电子商城，是在JFinal基础上搭建�
 
 ## 特别说明
 
-1.
+1. 免费下载jfinalshop 2.0入门学习，详细介绍请点[查看](https://git.oschina.net/hycx227/jfinalshop-2.0)jfinalshop2.0；
 
-2.
+2. 捐赠下载jfinalshop 3.0进阶学习，详细介绍请点[查看](https://git.oschina.net/hycx227/jfinalshop-2.0)jfinalshop3.0；
 
-3.
+3. 企业下载jfinalshop 4.0安装布署，请先联系。
