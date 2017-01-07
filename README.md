@@ -73,4 +73,4 @@ JFinalShop商城系统是B2C模式的电子商城，是在JFinal基础上搭建�
 
 2. 捐赠下载jfinalshop 3.0进阶学习，详细介绍请点[查看](https://git.oschina.net/hycx227/jfinalshop-2.0)jfinalshop3.0；
 
-3. 赞助下载jfinalshop 4.0二次开发，请先联系qq:614204367。
+3. 赞助下载jfinalshop 4.0二次开发，请先联系qq:187048359。
