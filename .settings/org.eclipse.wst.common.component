@@ -5,5 +5,5 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/resources"/>
         <property name="context-root" value="jfinalshop-2.0"/>
         <property name="java-output-path" value="/jfinalshop-2.0/WebRoot/WEB-INF/classes"/>
-    </wb-module>
+    </wb-module> 
 </project-modules>

@@ -6,7 +6,7 @@ public class Server {
 		// 建议采用tomcat
 		String webAppDir = Server.class.getResource("/").getPath().replace("/WEB-INF/classes/", "");
 		int port = 8080;
-		String content = "/";
+		String content = "/"; 
 		if (args != null && args.length > 0) {
 			try {
 				port = Integer.parseInt(args[0]);
