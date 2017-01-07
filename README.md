@@ -62,9 +62,6 @@ JFinalShop商城系统是B2C模式的电子商城，是在JFinal基础上搭建�
 
 4、导入数据库 \jfinalshop-4.0\jfinalshop4.sql
 
-5、前台用户账号，账号：abcd  密码：111111    demo地址：http://demo.jfinalshop.com
-   后台管理员账号，账号：jack 密码：123456   demo地址：http://demo.jfinalshop.com/admin
-
 ```
 
 ## JFinalShop 4.0特别说明
