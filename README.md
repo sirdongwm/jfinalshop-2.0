@@ -22,12 +22,11 @@ JFinalShop商城系统是B2C模式的电子商城，是在JFinal基础上搭建�
 ## JFinalShop 4.0 项目结构
  **商城系统采用Maven管理，包括以下7大模块：**
  jfinalshop-api 	：项目的对外接口Android、IOS、小程序等外部接口。
- jfinalshop-mobile 	：手机商城（开发中...）。
  jfinalshop-common 	：工具类，所有工具类都提取出来写在这个项目中。
  jfinalshop-core 	：核心业务项目。主要是Service处理业务逻辑。
  jfinalshop-model 	：数据模型，与数据库表字段对应的实体类。
  jfinalshop-dao 	：数据持久层，操作低层数据库。
- jfinalshop-web 	：项目的web层，页面的显示以及控制层。
+ jfinalshop-web 	：项目的web层，admin,shop,wap页面的显示以及控制层。
 
 
 ## JFinalShop 4.0 技术选型
