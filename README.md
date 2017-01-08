@@ -1,6 +1,6 @@
 ------------------------------------------------
 
-> 成功不仅是你拥有多少，更重要的是你帮助他人多少，有多少人因你而感动、因你而成长。
+> 让天下没有难做的商城
 
 ------------------------------------------------
 ## JFinalShop 4.0商城系统简介
@@ -66,8 +66,8 @@ JFinalShop商城系统是B2C模式的电子商城，是在JFinal基础上搭建�
 
 ## JFinalShop 4.0特别说明
 
-1. 免费下载jfinalshop 2.0入门学习，详细介绍请点[查看](https://git.oschina.net/hycx227/jfinalshop-2.0)jfinalshop2.0；
+1. 免费下载jfinalshop 2.0入门学习，详细介绍请点[查看](https://git.oschina.net/hycx227/jfinalshop-2.0)；
 
-2. 捐赠下载jfinalshop 3.0进阶学习，详细介绍请点[查看](https://git.oschina.net/hycx227/jfinalshop-2.0)jfinalshop3.0；
+2. 捐赠下载jfinalshop 3.0进阶学习，详细介绍请点[查看](https://git.oschina.net/hycx227/jfinalshop-2.0)；
 
-3. 赞助下载jfinalshop 4.0二次开发，请先联系qq:187048359。
+3. 赞助下载jfinalshop 4.0二次开发，详细介绍请先联系QQ:187048359。
