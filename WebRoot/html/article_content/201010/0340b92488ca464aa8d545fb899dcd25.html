@@ -45,15 +45,21 @@
   <script src="/statics/js/plugin/jquery.cookie.js"></script>
   <script src="/statics/js/plugin/jquery.form.js"></script>
   <script src="/statics/js/plugin/jquery.metadata.js"></script>
-  <script type="text/javascript">
-  $(function(){
-    $('.category-sort').bind({mouseover:function(){
-        $(this).children('.category-detail').removeClass("am-hide").show();
-      },mouseout:function(){
-        $(this).children('.category-detail').hide();
-      }
-    });
+  <script>
+$().ready( function() {
+  $hits = $("#hits");
+  // 统计文章点击数
+  $.ajax({
+	url: "/shop/article/ajaxCounter?id=402881882ba8753a012ba89e2b5a0009",
+	dataType: "json",
+	async: false,
+	success: function(data) {
+	  if (data.status == "success") {
+		$hits.text(data.hits);
+	  }
+	}
   });
+});
 </script>
 </head>
 <body>
@@ -509,46 +515,98 @@ $(function() {
   <div class="shop-content">
     <div class="shop-content-body">
       <div class="am-g">
-        <div class="am-u-sm-12 am-u-md-12 am-u-lg-8 am-padding-horizontal-xs">
-          <div class="am-slider am-slider-default" data-am-flexslider id="demo-slider-0">
-            <ul class="am-slides">
-              <li><img src="/statics/img/banner1.png" /></li>
-              <li><img src="/statics/img/banner2.png" /></li>
-              <li><img src="/statics/img/banner3.png" /></li>
-              <li><img src="/statics/img/banner4.png" /></li>
-            </ul>
+        <div class="am-u-md-3 am-hide-sm-only am-text-xs am-margin-left-0">
+          <table class="am-table am-table-bordered am-table-compact am-margin-top-xs">
+            <thead>
+            <tr>
+              <th class="am-primary">推荐文章</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>
+                <a href="/html/article_content/201010/c55109104bb241c7a51605602b1531df.html" title="会员注册协议">会员注册协议</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/html/article_content/201010/390aed8de096473aa3fd928c25bf9fb9.html" title="积分说明">积分说明</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/html/article_content/201010/0340b92488ca464aa8d545fb899dcd25.html" title="会员等级">会员等级</a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          
+          <table class="am-table am-table-bordered am-table-compact">
+            <thead>
+            <tr>
+              <th class="am-warning">热点文章</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>
+                <a href="/html/article_content/201010/0340b92488ca464aa8d545fb899dcd25.html" title="会员等级">会员等级</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/html/article_content/201010/c55109104bb241c7a51605602b1531df.html" title="会员注册协议">会员注册协议</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/html/article_content/201010/390aed8de096473aa3fd928c25bf9fb9.html" title="积分说明">积分说明</a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="am-u-sm-12 am-u-md-9">
+          <div class="am-g am-margin-vertical-xs">
+            <div class="am-u-sm-12 am-u-md-7">
+              <ol class="am-breadcrumb am-margin-bottom-0">
+                <li><span class="am-icon-home"> </span>首页</li>
+                <li><a href="/shop/article/list?id=402881882ba8753a012ba87a518e0001">关于会员</a></li>
+              </ol>
+            </div>
+            <div class="am-u-md-5 am-hide-sm-only">
+              <form id="articleSearchForm" action="/shop/article/search" method="get">
+              <div class="am-input-group am-input-group-sm am-input-group-primary">
+                <input type="text" id="articleSearchKeyword" name="keyword" class="am-form-field" placeholder="请输入关键词...">
+                <span class="am-input-group-btn">
+                  <button class="am-btn am-btn-primary" type="submit"><span class="am-icon-search"></span></button>
+                </span>
+              </div>
+              </form>
+            </div>
           </div>
-        </div>
-        <div class="am-u-lg-4">
-          <ol class="am-breadcrumb am-breadcrumb-slash am-margin-bottom-xs">
-            <li class="am-active"><span class="am-icon-cart-plus">新品上架</span></li>
-          </ol>
-          <ul class="am-avg-sm-3 am-avg-md-9 am-avg-lg-4 am-thumbnails">
-          </ul>
-        </div>
-      </div>
-          
-      <div class="am-panel am-panel-secondary">
-        <div class="am-panel-hd">
-          <ol class="am-breadcrumb am-breadcrumb-slash am-padding-0 am-margin-0">
-            <li class="am-active"><span class="am-icon-trophy"> </span>热卖商品</li>
-          </ol>
-        </div>
-        <div class="am-panel-bd">
-          <ul class="am-avg-sm-2 am-avg-md-3 am-avg-lg-5 am-thumbnails">
-          </ul>
-        </div>
-      </div>
-          
-      <div class="am-panel am-panel-success">
-        <div class="am-panel-hd">
-          <ol class="am-breadcrumb am-breadcrumb-slash am-padding-0 am-margin-0">
-            <li class="am-active"><span class="am-icon-thumbs-up"> </span>精品推荐</li>
-          </ol>
-        </div>
-        <div class="am-panel-bd">
-          <ul class="am-avg-sm-2 am-avg-md-3 am-avg-lg-5 am-thumbnails">
-          </ul>
+          <div class="am-panel am-panel-default">
+            <div class="am-panel-bd">
+            <article class="am-article">
+            <div class="am-article-hd">
+              <h1 class="am-article-title">会员等级</h1>
+              <p class="am-article-meta">
+                日期：2010-10-14&nbsp;&nbsp;
+                
+                点击：<span id="hits"></span> 次
+              </p>
+            </div>
+            <div class="am-article-bd">
+              <p class="am-article-lead"><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 会员等级共分四级，具体为：<span style="color: #ff0000;"><strong>普通会员、高级会员、白金会员、钻石会员</strong></span>等级升降均由系统自动实现，无需申请。<br />&nbsp;<br /><span style="color: #ff0000;">普通会员：</span><br />申请条件：任何愿意到商城购物的用户都可以免费注册。<br />待　　遇：可以享受注册会员所能购买的产品及服务。</p>
+<p><span style="color: #ff0000;">高级会员：</span><br />申请条件：一年内消费积分超过5000（含）的会员。<br />待　　遇：可以享受高级会员级别所能购买的产品及服务。</p>
+<p><span style="color: #ff0000;">白金会员：</span><br />申请条件：一年内消费积分超过10000（含）的会员。<br />待　　遇：可以享受白金会员级别所能购买的产品及服务。</p>
+<p><span style="color: #ff0000;">钻石会员：</span></p>
+<p>申请条件：一年内消费积分超过50000（含），需填写本人真实的身份证号码进行升级<br />待　　遇：可以享受钻石会员级别所能购买的产品及服务。</p>
+<p>&nbsp;</p>
+<p>注：针对各个等级会员特别声明： <br />会员账号禁止转借或转让他人使用，如因转借或转让他人使用所带来的一切后果，商城概不负责，如被商城发现有转借或转让使用情况，商城则有权立即取消此会员账号的相应等级资格。 <br />如商城发现相应的等级中有经销商，则商城有权立即取消此会员帐号的相应等级资格。</p></p>
+            </div>
+          </article></div>
+          </div>
         </div>
       </div>
       <div class="am-margin-horizontal">

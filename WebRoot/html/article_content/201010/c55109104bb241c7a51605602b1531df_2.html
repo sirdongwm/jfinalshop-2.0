@@ -45,15 +45,21 @@
   <script src="/statics/js/plugin/jquery.cookie.js"></script>
   <script src="/statics/js/plugin/jquery.form.js"></script>
   <script src="/statics/js/plugin/jquery.metadata.js"></script>
-  <script type="text/javascript">
-  $(function(){
-    $('.category-sort').bind({mouseover:function(){
-        $(this).children('.category-detail').removeClass("am-hide").show();
-      },mouseout:function(){
-        $(this).children('.category-detail').hide();
-      }
-    });
+  <script>
+$().ready( function() {
+  $hits = $("#hits");
+  // 统计文章点击数
+  $.ajax({
+	url: "/shop/article/ajaxCounter?id=402881882ba8753a012ba89f4296000a",
+	dataType: "json",
+	async: false,
+	success: function(data) {
+	  if (data.status == "success") {
+		$hits.text(data.hits);
+	  }
+	}
   });
+});
 </script>
 </head>
 <body>
@@ -509,46 +515,92 @@ $(function() {
   <div class="shop-content">
     <div class="shop-content-body">
       <div class="am-g">
-        <div class="am-u-sm-12 am-u-md-12 am-u-lg-8 am-padding-horizontal-xs">
-          <div class="am-slider am-slider-default" data-am-flexslider id="demo-slider-0">
-            <ul class="am-slides">
-              <li><img src="/statics/img/banner1.png" /></li>
-              <li><img src="/statics/img/banner2.png" /></li>
-              <li><img src="/statics/img/banner3.png" /></li>
-              <li><img src="/statics/img/banner4.png" /></li>
-            </ul>
+        <div class="am-u-md-3 am-hide-sm-only am-text-xs am-margin-left-0">
+          <table class="am-table am-table-bordered am-table-compact am-margin-top-xs">
+            <thead>
+            <tr>
+              <th class="am-primary">推荐文章</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>
+                <a href="/html/article_content/201010/c55109104bb241c7a51605602b1531df.html" title="会员注册协议">会员注册协议</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/html/article_content/201010/390aed8de096473aa3fd928c25bf9fb9.html" title="积分说明">积分说明</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/html/article_content/201010/0340b92488ca464aa8d545fb899dcd25.html" title="会员等级">会员等级</a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          
+          <table class="am-table am-table-bordered am-table-compact">
+            <thead>
+            <tr>
+              <th class="am-warning">热点文章</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>
+                <a href="/html/article_content/201010/0340b92488ca464aa8d545fb899dcd25.html" title="会员等级">会员等级</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/html/article_content/201010/c55109104bb241c7a51605602b1531df.html" title="会员注册协议">会员注册协议</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/html/article_content/201010/390aed8de096473aa3fd928c25bf9fb9.html" title="积分说明">积分说明</a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="am-u-sm-12 am-u-md-9">
+          <div class="am-g am-margin-vertical-xs">
+            <div class="am-u-sm-12 am-u-md-7">
+              <ol class="am-breadcrumb am-margin-bottom-0">
+                <li><span class="am-icon-home"> </span>首页</li>
+                <li><a href="/shop/article/list?id=402881882ba8753a012ba87a518e0001">关于会员</a></li>
+              </ol>
+            </div>
+            <div class="am-u-md-5 am-hide-sm-only">
+              <form id="articleSearchForm" action="/shop/article/search" method="get">
+              <div class="am-input-group am-input-group-sm am-input-group-primary">
+                <input type="text" id="articleSearchKeyword" name="keyword" class="am-form-field" placeholder="请输入关键词...">
+                <span class="am-input-group-btn">
+                  <button class="am-btn am-btn-primary" type="submit"><span class="am-icon-search"></span></button>
+                </span>
+              </div>
+              </form>
+            </div>
           </div>
-        </div>
-        <div class="am-u-lg-4">
-          <ol class="am-breadcrumb am-breadcrumb-slash am-margin-bottom-xs">
-            <li class="am-active"><span class="am-icon-cart-plus">新品上架</span></li>
-          </ol>
-          <ul class="am-avg-sm-3 am-avg-md-9 am-avg-lg-4 am-thumbnails">
-          </ul>
-        </div>
-      </div>
-          
-      <div class="am-panel am-panel-secondary">
-        <div class="am-panel-hd">
-          <ol class="am-breadcrumb am-breadcrumb-slash am-padding-0 am-margin-0">
-            <li class="am-active"><span class="am-icon-trophy"> </span>热卖商品</li>
-          </ol>
-        </div>
-        <div class="am-panel-bd">
-          <ul class="am-avg-sm-2 am-avg-md-3 am-avg-lg-5 am-thumbnails">
-          </ul>
-        </div>
-      </div>
-          
-      <div class="am-panel am-panel-success">
-        <div class="am-panel-hd">
-          <ol class="am-breadcrumb am-breadcrumb-slash am-padding-0 am-margin-0">
-            <li class="am-active"><span class="am-icon-thumbs-up"> </span>精品推荐</li>
-          </ol>
-        </div>
-        <div class="am-panel-bd">
-          <ul class="am-avg-sm-2 am-avg-md-3 am-avg-lg-5 am-thumbnails">
-          </ul>
+          <div class="am-panel am-panel-default">
+            <div class="am-panel-bd">
+            <article class="am-article">
+            <div class="am-article-hd">
+              <h1 class="am-article-title">会员注册协议(2)</h1>
+              <p class="am-article-meta">
+                日期：2010-10-14&nbsp;&nbsp;
+                
+                点击：<span id="hits"></span> 次
+              </p>
+            </div>
+            <div class="am-article-bd">
+              <p class="am-article-lead"><p>商城提供的所有内容，如文字、图片、图像、视频、软件等都是本商城财产。同时，本商城相关著作权、专利权、商标及其它任何所有权或权利，均属本商城所有，受中国《商标法》、《著作权法》和国际版权法等相关法律的保护。除非中国法律另有规定，未经本商城的同意，任何企业或个人均无权复制、下载、传输、再造本网站任何内容，也不得提供给第三者使用，否则应负所有法律责任。违反上述声明而给本公司造成损失的，本公司将依法追究其法律责任。<br /><br />六、免责声明：<br />商城有义务在技术上确保商城的正常运行，尽力避免服务中断或将中断时间限制在最短时间内，保证会员网上交易活动的顺利进行。但以下情况，本商城无需承担任何责任：<br />（1）由于您将会员密码告知他人或与他人共享注册账户，由此导致任何个人资料泄露，本商城不承担责任；&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; （2）任何由于黑客攻击、计算机病毒侵入或发作、因政府管理而造成暂时性关闭等影响网络正常经营之不可抗力而造成本网站崩溃或无法正常使用导致网上交易无法完成或丢失有关的信息、记录等，本商城不承担责任；<br />（3）任何会员向本商城提供错误、不完整、不实信息等造成不能正常使用本网服务或遭受任何其他损失，概与本网无关。</p></p>
+            </div>
+          </article></div>
+          </div>
         </div>
       </div>
       <div class="am-margin-horizontal">

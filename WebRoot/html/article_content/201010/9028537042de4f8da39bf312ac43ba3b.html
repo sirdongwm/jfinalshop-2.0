@@ -45,15 +45,21 @@
   <script src="/statics/js/plugin/jquery.cookie.js"></script>
   <script src="/statics/js/plugin/jquery.form.js"></script>
   <script src="/statics/js/plugin/jquery.metadata.js"></script>
-  <script type="text/javascript">
-  $(function(){
-    $('.category-sort').bind({mouseover:function(){
-        $(this).children('.category-detail').removeClass("am-hide").show();
-      },mouseout:function(){
-        $(this).children('.category-detail').hide();
-      }
-    });
+  <script>
+$().ready( function() {
+  $hits = $("#hits");
+  // 统计文章点击数
+  $.ajax({
+	url: "/shop/article/ajaxCounter?id=402881862bee2228012bee26bc6b0001",
+	dataType: "json",
+	async: false,
+	success: function(data) {
+	  if (data.status == "success") {
+		$hits.text(data.hits);
+	  }
+	}
   });
+});
 </script>
 </head>
 <body>
@@ -509,46 +515,84 @@ $(function() {
   <div class="shop-content">
     <div class="shop-content-body">
       <div class="am-g">
-        <div class="am-u-sm-12 am-u-md-12 am-u-lg-8 am-padding-horizontal-xs">
-          <div class="am-slider am-slider-default" data-am-flexslider id="demo-slider-0">
-            <ul class="am-slides">
-              <li><img src="/statics/img/banner1.png" /></li>
-              <li><img src="/statics/img/banner2.png" /></li>
-              <li><img src="/statics/img/banner3.png" /></li>
-              <li><img src="/statics/img/banner4.png" /></li>
-            </ul>
+        <div class="am-u-md-3 am-hide-sm-only am-text-xs am-margin-left-0">
+          <table class="am-table am-table-bordered am-table-compact am-margin-top-xs">
+            <thead>
+            <tr>
+              <th class="am-primary">推荐文章</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>
+                <a href="/html/article_content/201010/9028537042de4f8da39bf312ac43ba3b.html" title="邮局汇款">邮局汇款</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/html/article_content/201010/47532f706bf94c9ebb23a87a99424072.html" title="工商网银付款说明">工商网银付款说明</a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          
+          <table class="am-table am-table-bordered am-table-compact">
+            <thead>
+            <tr>
+              <th class="am-warning">热点文章</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>
+                <a href="/html/article_content/201010/9028537042de4f8da39bf312ac43ba3b.html" title="邮局汇款">邮局汇款</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/html/article_content/201010/47532f706bf94c9ebb23a87a99424072.html" title="工商网银付款说明">工商网银付款说明</a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="am-u-sm-12 am-u-md-9">
+          <div class="am-g am-margin-vertical-xs">
+            <div class="am-u-sm-12 am-u-md-7">
+              <ol class="am-breadcrumb am-margin-bottom-0">
+                <li><span class="am-icon-home"> </span>首页</li>
+                <li><a href="/shop/article/list?id=402881882ba8455f012ba86aa5c60002">支付方式</a></li>
+              </ol>
+            </div>
+            <div class="am-u-md-5 am-hide-sm-only">
+              <form id="articleSearchForm" action="/shop/article/search" method="get">
+              <div class="am-input-group am-input-group-sm am-input-group-primary">
+                <input type="text" id="articleSearchKeyword" name="keyword" class="am-form-field" placeholder="请输入关键词...">
+                <span class="am-input-group-btn">
+                  <button class="am-btn am-btn-primary" type="submit"><span class="am-icon-search"></span></button>
+                </span>
+              </div>
+              </form>
+            </div>
           </div>
-        </div>
-        <div class="am-u-lg-4">
-          <ol class="am-breadcrumb am-breadcrumb-slash am-margin-bottom-xs">
-            <li class="am-active"><span class="am-icon-cart-plus">新品上架</span></li>
-          </ol>
-          <ul class="am-avg-sm-3 am-avg-md-9 am-avg-lg-4 am-thumbnails">
-          </ul>
-        </div>
-      </div>
-          
-      <div class="am-panel am-panel-secondary">
-        <div class="am-panel-hd">
-          <ol class="am-breadcrumb am-breadcrumb-slash am-padding-0 am-margin-0">
-            <li class="am-active"><span class="am-icon-trophy"> </span>热卖商品</li>
-          </ol>
-        </div>
-        <div class="am-panel-bd">
-          <ul class="am-avg-sm-2 am-avg-md-3 am-avg-lg-5 am-thumbnails">
-          </ul>
-        </div>
-      </div>
-          
-      <div class="am-panel am-panel-success">
-        <div class="am-panel-hd">
-          <ol class="am-breadcrumb am-breadcrumb-slash am-padding-0 am-margin-0">
-            <li class="am-active"><span class="am-icon-thumbs-up"> </span>精品推荐</li>
-          </ol>
-        </div>
-        <div class="am-panel-bd">
-          <ul class="am-avg-sm-2 am-avg-md-3 am-avg-lg-5 am-thumbnails">
-          </ul>
+          <div class="am-panel am-panel-default">
+            <div class="am-panel-bd">
+            <article class="am-article">
+            <div class="am-article-hd">
+              <h1 class="am-article-title">邮局汇款</h1>
+              <p class="am-article-meta">
+                日期：2010-10-27&nbsp;&nbsp;
+                
+                点击：<span id="hits"></span> 次
+              </p>
+            </div>
+            <div class="am-article-bd">
+              <p class="am-article-lead"><p>邮局汇款<br />工行<br />账号：xxxxxxxx <br />收&nbsp; 款&nbsp; 人：xxxxxxxxxxxx有限公司 <br />农行 <br />账号：xxxxxxxx<br />收&nbsp; 款&nbsp; 人：xxxxxxxxxxxx有限公司 <br />支付宝<br />账号：xxxxxxxx <br />收&nbsp; 款&nbsp; 人：xxxxxxxxxxxx有限公司 <br />财付通<br />账号：xxxxxxxx <br />收&nbsp; 款&nbsp; 人：xxxxxxxxxxxxx有限公司</p>
+<p>邮局汇款说明：<br />1、邮局汇款是客户将订单金额通过邮局汇到商城的一种结算支付方式。<br />2、选择此方式支付货款的客户，请您在下单后尽快到邮局进行汇款，汇款完毕后，请务必进入订单信息页面填写汇款确认（3日内未填写付款确认的订单会被系统自动移除）。<br />3、货款到账时间一般为款汇出后的1-3个工作日内，收到货款后我司会尽快为您发货。 <br />汇款单填写范例：</p>
+<p>&nbsp;<br />注意事项：<br />(1)请在汇款种类选择：商务汇款，并填写相应的商务账号； <br />(2)请在汇款单的&ldquo;附言&rdquo;处注明订单号和收货人姓名，以加快订单汇款确认速度； <br />(3)付款后请务必进入&ldquo;订单中心&rdquo;填写付款确认。</p></p>
+            </div>
+          </article></div>
+          </div>
         </div>
       </div>
       <div class="am-margin-horizontal">
